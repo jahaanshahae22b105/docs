@@ -1,97 +1,139 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Transcribe audio with Waves Speech-to-Text (STT)"
+description: "Quickly convert spoken audio into text using Waves STT — send an audio file or remote URL and receive a JSON transcript with timestamps and confidence scores."
 ---
 
-## Setting up
+# Waves Speech-to-Text (STT)
 
-Get your documentation site up and running in minutes.
+Convert audio to accurate, timestamped text in one API call. Supports file uploads (multipart), remote audio URLs, and common audio formats (WAV, MP3, M4A). Designed for quick integration into transcription pipelines and apps.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+---
 
-## Make it yours
+## Endpoint
 
-Design a docs site that looks great and empowers your users.
+- **URL:** ```POST https://api.waves.smallest.ai/v1/stt/transcribe```
+- **Method:** `POST`
 
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
+> **Note:** This example endpoint is the recommended integration pattern — use your workspace or environment-specific base URL when available.
 
-## Create beautiful pages
+---
 
-Everything you need to create world-class documentation.
+## Required headers
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+- `Authorization: Bearer <YOUR_API_KEY>`
+- `Content-Type`: `multipart/form-data` (when uploading a file) or `application/json` (when sending an `audio_url`)
+- `Accept: application/json`
 
-## Need inspiration?
+---
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+## Request — option A: `curl` (upload local file)
+
+<CodeGroup>
+
+```bash
+curl -X POST "[https://api.waves.smallest.ai/v1/stt/transcribe](https://api.waves.smallest.ai/v1/stt/transcribe)" \
+  -H "Authorization: Bearer $WAVES_API_KEY" \
+  -H "Accept: application/json" \
+  -F "file=@/path/to/audio.wav" \
+  -F "model=whisper-large" \
+  -F "language=en" \
+  -F "profanity_filter=true"
+```
+
+
+```python Python
+import requests
+
+url = "[https://waves-api.smallest.ai/api/v1/transcribe](https://waves-api.smallest.ai/api/v1/transcribe)"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+files = {"file": open("audio.wav", "rb")}
+data = {"language": "en"}
+
+response = requests.post(url, headers=headers, files=files, data=data)
+print(response.json())
+```
+
+
+```javascript JavaScript
+const res = await fetch("[https://api.waves.smallest.ai/v1/stt/transcribe](https://api.waves.smallest.ai/v1/stt/transcribe)", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${process.env.WAVES_API_KEY}`,
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  body: JSON.stringify({
+    audio_url: "[https://example.com/audio/interview-01.mp3](https://example.com/audio/interview-01.mp3)",
+    model: "whisper-large",
+    language: "en",
+    enable_punctuation: true
+  })
+});
+
+const json = await res.json();
+console.log(json.transcript);
+```
+
+</CodeGroup>
+
+## Sample Response
+
+<ResponseField name="status" type="string">
+  The status of the request (e.g., "success").
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="properties">
+    <ResponseField name="text" type="string">
+      The full transcribed text.
+    </ResponseField>
+    <ResponseField name="confidence" type="number">
+      A score between 0 and 1 indicating the model's confidence.
+    </ResponseField>
+    <ResponseField name="duration" type="number">
+      The duration of the processed audio in seconds.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseExample>
+
+```json Response
+{
+  "request_id": "req_01F3X2Y7ZABCDEF",
+  "status": "completed",
+  "model": "whisper-large",
+  "language": "en",
+  "transcript": "Good morning everyone. Today we'll talk about the product roadmap...",
+  "confidence": 0.91,
+  "segments": [
+    {
+      "start": 0.34,
+      "end": 3.20,
+      "text": "Good morning everyone.",
+      "confidence": 0.95
+    },
+    {
+      "start": 3.21,
+      "end": 9.50,
+      "text": "Today we'll talk about the product roadmap and next steps.",
+      "confidence": 0.90
+    }
+  ],
+  "duration_seconds": 120.4
+}
+```
+
+</ResponseExample>
+
+## Common parameters
+
+- **`model`**: Model identifier (e.g. `whisper-small`, `whisper-large`). Choose larger models for better accuracy.
+- **`language`**: ISO language code (e.g. `en`, `es`). If omitted, the service may auto-detect.
+- **`enable_punctuation`**: `true` / `false` (insert punctuation and capitalization).
+- **`profanity_filter`**: `true` / `false` (mask or remove profanities).
+- **`speaker_diarization`**: `true` / `false` (if supported, returns speaker labels in segments).
+
+<Note>
+  **Tip:** For the best transcription accuracy, we recommend using **16kHz .wav files**. This ensures the audio is uncompressed and retains the highest fidelity for the model. **Tip:** If you receive a 401/403, verify your API key and that it has STT scope enabled.
+</Note>
