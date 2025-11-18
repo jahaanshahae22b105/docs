@@ -1,9 +1,9 @@
 ---
-title: "Transcribe audio with Waves Speech-to-Text (STT)"
-description: "Quickly convert spoken audio into text using Waves STT — send an audio file or remote URL and receive a JSON transcript with timestamps and confidence scores."
+title: "Waves Speech-to-Text (STT)"
+description: "Quickly convert spoken audio into text using Waves STT."
 ---
 
-# Waves Speech-to-Text (STT)
+# Transcribe audio with Waves Speech-to-Text (STT)
 
 Convert audio to accurate, timestamped text in one API call. Supports file uploads (multipart), remote audio URLs, and common audio formats (**`wav`**, **`mp3`**, **`m4a`**). Designed for quick integration into transcription pipelines and apps.
 
@@ -18,15 +18,15 @@ Convert audio to accurate, timestamped text in one API call. Supports file uploa
 
 ## Required headers
 
-| Header          | Value                                           | Description                                 |
-| :-------------- | :---------------------------------------------- | :------------------------------------------ |
-| `Authorization` | `Bearer <YOUR_API_KEY>`                         | Required for authentication.                |
-| `Content-Type`  | `multipart/form-data` **OR** `application/json` | Use `multipart` for files, `json` for URLs. |
-| `Accept`        | `application/json`                              | Standard response format.                   |
+| Header                                                              | Value                                           | Description                                 |
+| :------------------------------------------------------------------ | :---------------------------------------------- | :------------------------------------------ |
+| <Badge icon="lock" color="blue">Authorization</Badge>               | `Bearer <YOUR_API_KEY>`                         | Required for authentication.                |
+| <Badge icon="table-of-contents" color="orange">Content-Type</Badge> | `multipart/form-data` **OR** `application/json` | Use `multipart` for files, `json` for URLs. |
+| <Badge icon="circle-check" color="green">Accept</Badge>             | `application/json`                              | Standard response format.                   |
 
 ## Sample Request
 
-<CodeGroup>
+<RequestExample>
 
 ```bash curl
 curl -X POST "[https://api.waves.smallest.ai/v1/stt/transcribe](https://api.waves.smallest.ai/v1/stt/transcribe)" \
@@ -72,11 +72,11 @@ const json = await res.json();
 console.log(json.transcript);
 ```
 
-</CodeGroup>
+</RequestExample>
 
-<Note>
+<Tip>
   **Tip:** For the best transcription accuracy, we recommend using **16kHz .wav files**. This ensures the audio is uncompressed and retains the highest fidelity for the model.
-</Note>
+</Tip>
 
 ## Sample Response
 
@@ -120,6 +120,6 @@ console.log(json.transcript);
 | **`profanity_filter`**    | `true` / `false`                 | Instructs the service to **mask or remove profanities**.            |
 | **`speaker_diarization`** | `true` / `false`                 | If supported, enables returning **speaker labels** within segments. |
 
-<Note>
+<Tip>
   **Tip:** If you receive a 401/403, verify your API key and that it has STT scope enabled.
-</Note>
+</Tip>
