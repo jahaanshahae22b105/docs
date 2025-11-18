@@ -5,13 +5,13 @@ description: "Quickly convert spoken audio into text using Waves STT — send an
 
 # Waves Speech-to-Text (STT)
 
-Convert audio to accurate, timestamped text in one API call. Supports file uploads (multipart), remote audio URLs, and common audio formats (WAV, MP3, M4A). Designed for quick integration into transcription pipelines and apps.
+Convert audio to accurate, timestamped text in one API call. Supports file uploads (multipart), remote audio URLs, and common audio formats (**`wav`**, **`mp3`**, **`m4a`**). Designed for quick integration into transcription pipelines and apps.
 
 ---
 
 ## Endpoint
 
-- **URL:** ```POST https://api.waves.smallest.ai/v1/stt/transcribe```
+- **URL:** `https://api.waves.smallest.ai/v1/stt/transcribe`
 - **Method:** `POST`
 
 > **Note:** This example endpoint is the recommended integration pattern — use your workspace or environment-specific base URL when available.
@@ -30,7 +30,7 @@ Convert audio to accurate, timestamped text in one API call. Supports file uploa
 
 <CodeGroup>
 
-```bash
+```bash curl
 curl -X POST "[https://api.waves.smallest.ai/v1/stt/transcribe](https://api.waves.smallest.ai/v1/stt/transcribe)" \
   -H "Authorization: Bearer $WAVES_API_KEY" \
   -H "Accept: application/json" \
@@ -78,27 +78,9 @@ console.log(json.transcript);
 
 ## Sample Response
 
-<ResponseField name="status" type="string">
-  The status of the request (e.g., "success").
-</ResponseField>
-
-<ResponseField name="data" type="object">
-  <Expandable title="properties">
-    <ResponseField name="text" type="string">
-      The full transcribed text.
-    </ResponseField>
-    <ResponseField name="confidence" type="number">
-      A score between 0 and 1 indicating the model's confidence.
-    </ResponseField>
-    <ResponseField name="duration" type="number">
-      The duration of the processed audio in seconds.
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
 <ResponseExample>
 
-```json Response
+```json JSON
 {
   "request_id": "req_01F3X2Y7ZABCDEF",
   "status": "completed",
