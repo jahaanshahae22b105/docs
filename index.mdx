@@ -7,26 +7,24 @@ description: "Quickly convert spoken audio into text using Waves STT — send an
 
 Convert audio to accurate, timestamped text in one API call. Supports file uploads (multipart), remote audio URLs, and common audio formats (**`wav`**, **`mp3`**, **`m4a`**). Designed for quick integration into transcription pipelines and apps.
 
----
-
 ## Endpoint
 
 - **URL:** `https://api.waves.smallest.ai/v1/stt/transcribe`
 - **Method:** `POST`
 
-> **Note:** This example endpoint is the recommended integration pattern — use your workspace or environment-specific base URL when available.
-
----
+<Note>
+  **Note:** This example endpoint is the recommended integration pattern — use your workspace or environment-specific base URL.
+</Note>
 
 ## Required headers
 
-- `Authorization: Bearer <YOUR_API_KEY>`
-- `Content-Type`: `multipart/form-data` (when uploading a file) or `application/json` (when sending an `audio_url`)
-- `Accept: application/json`
+| Header          | Value                                           | Description                                 |
+| :-------------- | :---------------------------------------------- | :------------------------------------------ |
+| `Authorization` | `Bearer <YOUR_API_KEY>`                         | Required for authentication.                |
+| `Content-Type`  | `multipart/form-data` **OR** `application/json` | Use `multipart` for files, `json` for URLs. |
+| `Accept`        | `application/json`                              | Standard response format.                   |
 
----
-
-## Request — option A: `curl` (upload local file)
+## Sample Request
 
 <CodeGroup>
 
@@ -76,11 +74,15 @@ console.log(json.transcript);
 
 </CodeGroup>
 
+<Note>
+  **Tip:** For the best transcription accuracy, we recommend using **16kHz .wav files**. This ensures the audio is uncompressed and retains the highest fidelity for the model.
+</Note>
+
 ## Sample Response
 
 <ResponseExample>
 
-```json JSON
+```json Response Example
 {
   "request_id": "req_01F3X2Y7ZABCDEF",
   "status": "completed",
@@ -110,12 +112,14 @@ console.log(json.transcript);
 
 ## Common parameters
 
-- **`model`**: Model identifier (e.g. `whisper-small`, `whisper-large`). Choose larger models for better accuracy.
-- **`language`**: ISO language code (e.g. `en`, `es`). If omitted, the service may auto-detect.
-- **`enable_punctuation`**: `true` / `false` (insert punctuation and capitalization).
-- **`profanity_filter`**: `true` / `false` (mask or remove profanities).
-- **`speaker_diarization`**: `true` / `false` (if supported, returns speaker labels in segments).
+| Parameter                 | Type / Example Value             | Description                                                         |
+| :------------------------ | :------------------------------- | :------------------------------------------------------------------ |
+| **`model`**               | `whisper-small`, `whisper-large` | Model identifier. Choose a larger model for **better accuracy**.    |
+| **`language`**            | ISO Code (e.g., `en`, `es`)      | ISO language code. If omitted, the service may **auto-detect**.     |
+| **`enable_punctuation`**  | `true` / `false`                 | Instructs the service to insert **punctuation and capitalization**. |
+| **`profanity_filter`**    | `true` / `false`                 | Instructs the service to **mask or remove profanities**.            |
+| **`speaker_diarization`** | `true` / `false`                 | If supported, enables returning **speaker labels** within segments. |
 
 <Note>
-  **Tip:** For the best transcription accuracy, we recommend using **16kHz .wav files**. This ensures the audio is uncompressed and retains the highest fidelity for the model. **Tip:** If you receive a 401/403, verify your API key and that it has STT scope enabled.
+  **Tip:** If you receive a 401/403, verify your API key and that it has STT scope enabled.
 </Note>
