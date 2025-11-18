@@ -24,22 +24,10 @@ Convert audio to accurate, timestamped text in one API call. Supports file uploa
 | <Badge icon="table-of-contents" color="orange">Content-Type</Badge> | `multipart/form-data` **OR** `application/json` | Use `multipart` for files, `json` for URLs. |
 | <Badge icon="circle-check" color="green">Accept</Badge>             | `application/json`                              | Standard response format.                   |
 
-## Sample Request
 
 <RequestExample>
 
-```bash curl
-curl -X POST "[https://api.waves.smallest.ai/v1/stt/transcribe](https://api.waves.smallest.ai/v1/stt/transcribe)" \
-  -H "Authorization: Bearer $WAVES_API_KEY" \
-  -H "Accept: application/json" \
-  -F "file=@/path/to/audio.wav" \
-  -F "model=whisper-large" \
-  -F "language=en" \
-  -F "profanity_filter=true"
-```
-
-
-```python Python
+```python Sample Request
 import requests
 
 url = "[https://waves-api.smallest.ai/api/v1/transcribe](https://waves-api.smallest.ai/api/v1/transcribe)"
@@ -51,38 +39,15 @@ response = requests.post(url, headers=headers, files=files, data=data)
 print(response.json())
 ```
 
-
-```javascript JavaScript
-const res = await fetch("[https://api.waves.smallest.ai/v1/stt/transcribe](https://api.waves.smallest.ai/v1/stt/transcribe)", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${process.env.WAVES_API_KEY}`,
-    "Content-Type": "application/json",
-    "Accept": "application/json"
-  },
-  body: JSON.stringify({
-    audio_url: "[https://example.com/audio/interview-01.mp3](https://example.com/audio/interview-01.mp3)",
-    model: "whisper-large",
-    language: "en",
-    enable_punctuation: true
-  })
-});
-
-const json = await res.json();
-console.log(json.transcript);
-```
-
 </RequestExample>
 
 <Tip>
   **Tip:** For the best transcription accuracy, we recommend using **16kHz .wav files**. This ensures the audio is uncompressed and retains the highest fidelity for the model.
 </Tip>
 
-## Sample Response
-
 <ResponseExample>
 
-```json Response Example
+```json Sample Response
 {
   "request_id": "req_01F3X2Y7ZABCDEF",
   "status": "completed",
